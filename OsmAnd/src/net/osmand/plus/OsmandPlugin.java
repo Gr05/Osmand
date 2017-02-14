@@ -28,6 +28,7 @@ import net.osmand.plus.parkingpoint.ParkingPositionPlugin;
 import net.osmand.plus.rastermaps.OsmandRasterMapsPlugin;
 import net.osmand.plus.skimapsplugin.SkiMapsPlugin;
 import net.osmand.plus.srtmplugin.SRTMPlugin;
+import net.osmand.plus.traffic.TrafficPlugin;
 import net.osmand.plus.views.OsmandMapTileView;
 
 import org.apache.commons.logging.Log;
@@ -108,8 +109,9 @@ public abstract class OsmandPlugin {
 		allPlugins.add(new OsMoPlugin(app));
 		checkMarketPlugin(app, new SRTMPlugin(app), true, SRTM_PLUGIN_COMPONENT_PAID, SRTM_PLUGIN_COMPONENT);
 
-		// ? questionable - definitely not market plugin 
+		// ? questionable - definitely not market plugin
 //		checkMarketPlugin(app, new TouringViewPlugin(app), false, TouringViewPlugin.COMPONENT, null);
+		checkMarketPlugin(app, new TrafficPlugin(app), false, TrafficPlugin.COMPONENT, null);
 		checkMarketPlugin(app, new NauticalMapsPlugin(app), false, NauticalMapsPlugin.COMPONENT, null);
 		checkMarketPlugin(app, new SkiMapsPlugin(app), false, SkiMapsPlugin.COMPONENT, null);
 

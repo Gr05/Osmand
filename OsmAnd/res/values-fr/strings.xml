@@ -2574,4 +2574,6 @@ Si vous appréciez OsmAnd et OSM et que vous souhaitez soutenir ces projets, c\'
 Merci d\'indiquer un code long</string>
     <string name="navigate_point_olc_info_area">Code d\'emplacement valide
 représentant la zone : %1$s x %2$s</string>
+    <string name="plugin_traffic_descr">Ce greffon permet d\'observer la densité de trafic sur les routes grâce à un code couleur</string>
+    <string name="plugin_traffic_name">Trafic</string>
     </resources>
