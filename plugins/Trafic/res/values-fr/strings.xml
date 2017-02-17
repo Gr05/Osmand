@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources><string name="shared_string_no">Non</string>
-    <string name="shared_string_yes">Oui</string>
-    <string name="osmand_app_not_found">OsmAnd n\'est pas installé</string>
-    <string name="app_name">Greffon Trafic pour OsmAnd</string>
-    <string name="trafic_plugin_installed">Le greffon Trafic est installé et activé dans les paramètres de OsmAnd.</string>
-</resources>

@@ -100,7 +100,7 @@ public class SettingsMonitoringActivity extends SettingsBaseActivity {
 		names = new String[floatValues.length];
 		names[0] = getString(R.string.shared_string_not_selected);
 		for(int i = 1; i < floatValues.length; i++) {
-			names[i] = floatValues[i].intValue() + " " + getString(R.string.m) + "  (" + Math.round(floatValues[i]/0.3048f) + " " + getString(R.string.foot) + ")";
+			names[i] = floatValues[i].intValue() + ""; 
 		}
 		cat.addPreference(createListPreference(settings.SAVE_TRACK_PRECISION, names, floatValues,  
 				R.string.save_track_precision, R.string.save_track_precision_descr));
@@ -113,8 +113,6 @@ public class SettingsMonitoringActivity extends SettingsBaseActivity {
 		}
 		cat.addPreference(createListPreference(settings.SAVE_TRACK_MIN_SPEED, names, floatValues,  
 				R.string.save_track_min_speed, R.string.save_track_min_speed_descr));
-		cat.addPreference(createCheckBoxPreference(settings.AUTO_SPLIT_RECORDING, R.string.auto_split_recording_title,
-				R.string.auto_split_recording_descr));
 		cat.addPreference(createCheckBoxPreference(settings.DISABLE_RECORDING_ONCE_APP_KILLED, R.string.disable_recording_once_app_killed,
 				R.string.disable_recording_once_app_killed_descrp));
 	}

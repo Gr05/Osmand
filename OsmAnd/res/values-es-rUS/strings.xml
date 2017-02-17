@@ -2570,8 +2570,8 @@ Si amas a OsmAnd, OSM y quieres apoyarlos, esta es una perfecta manera de hacerl
     <string name="quick_action_map_style_action">Añadir un estilo de mapa</string>
     <string name="quick_action_empty_param_error">Los parámetros no deben estar vacíos</string>
     <string name="quick_action_map_styles">Estilos de mapa</string>
-    <string name="quick_action_map_overlay">Cambiar mapa superpuesto</string>
-    <string name="quick_action_map_overlay_title">Mapas superpuestos</string>
+    <string name="quick_action_map_overlay">Cambiar superposición de mapa</string>
+    <string name="quick_action_map_overlay_title">Superposiciones de mapa</string>
     <string name="quick_action_map_overlay_action">Añadir superposición</string>
     <string name="quick_action_map_underlay">Cambiar mapa subyacente</string>
     <string name="quick_action_map_underlay_title">Mapas subyacentes</string>
@@ -2583,7 +2583,7 @@ Si amas a OsmAnd, OSM y quieres apoyarlos, esta es una perfecta manera de hacerl
     <string name="quick_action_btn_tutorial_title">Cambiar ubicación del botón</string>
     <string name="quick_action_btn_tutorial_descr">Mantener pulsado y arrastrar el botón para mover la ubicación en la pantalla</string>
 <string name="quick_action_interim_dialog">Mostrar un diálogo temporal</string>
-    <string name="navigate_point_olc">Código abierto de ubicación (OLC)</string>
+    <string name="navigate_point_olc">Código Abierto de Ubicación (OLC)</string>
     <string name="navigate_point_olc_info_invalid">OLC inválido
 </string>
     <string name="navigate_point_olc_info_short">OLC corto
@@ -2593,27 +2593,4 @@ Representa el área: %1$s x %2$s</string>
     <string name="quick_action_map_overlay_switch">Se cambió el mapa superpuesto a \"%s\".</string>
     <string name="quick_action_map_underlay_switch">Se cambió el mapa subyacente a \"%s\".</string>
     <string name="quick_action_page_list_descr">Pulsar el botón de acción mostrará la siguiente lista.</string>
-    <string name="auto_split_recording_title">División automática de grabaciones en intervalos</string>
-	<string name="auto_split_recording_descr">Iniciar nuevo segmento en el lapso de 6 min, nueva traza en el lapso de 2 h, o nuevo archivo en el lapso más largo si la fecha se cambió.</string>
-    <string name="release_2_6">"
- • Nueva función: Botón de acción rápida
-
- • Mejorada la respuesta de gestos táctiles
-
- • El tipo de letra del nuevo mapa abarca más regiones
-
- • Soporte TTS para idiomas regionales
-
- • Mejorada la visibilidad en varios estilos de mapas y Wikipedia
-
- • Soporte para «Código abierto de ubicación» (Open Location Code)
-
- • Visualización básica de la elevación para los GPX grabados
-
- • Varias otras mejoras y corrección de errores
-
- y más…
- "</string>
-	<string name="rendering_attr_depthContours_description">Mostrar profundidad de contornos y puntos</string>
-    <string name="rendering_attr_depthContours_name">Profundidad de contorno</string>
-	</resources>
+    </resources>
