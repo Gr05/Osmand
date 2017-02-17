@@ -2682,7 +2682,7 @@ Hvis du  ønsker at støtte OsmAnd og OSM, er dette en god måde at gøre det p�
     <string name="save_track_min_distance">Logning ved detektering af bevægelse</string>
     <string name="save_track_min_distance_descr">Indstil minimumsafstand fra sidste position før et punkt logges</string>
     <string name="save_track_precision">Mindste nøjagtighed for logning</string>
-    <string name="save_track_precision_descr">Indstil minimum præcision før et punkt logges</string>
+    <string name="save_track_precision_descr">Indstil minimum nøjagtighed før et punkt logges</string>
     <string name="rendering_attr_contourColorScheme_description">Farveskema for højdekurver</string>
     <string name="shared_string_continue">Fortsæt</string>
     <string name="shared_string_pause">Pause</string>
@@ -2827,4 +2827,35 @@ Repræsenterer område: %1$s x %2$s</string>
     <string name="quick_action_map_overlay_switch">Kortoverlejring ændret til \"%s\".</string>
     <string name="quick_action_map_underlay_switch">Kortunderlejring ændret til \"%s\".</string>
     <string name="quick_action_page_list_descr">Tryk på genvejen vil gennemløbe nedenstående liste.</string>
-    </resources>
+    <string name="auto_split_recording_title">Opdel automatisk optagelser efter et ophold</string>
+	<string name="auto_split_recording_descr">Start et nyt segment efter ophold på 6 min., et nyt spor efter 2 t, eller en ny fil efter længere ophold, hvis datoen er ændret.</string>
+    <string name="release_2_6">"
+ • Ny funktion: Genvejsknap
+
+
+  • Forbedret respons på berøringsskærm
+
+
+  • Nye skrifttyper dækker flere landestandarder
+
+
+  • Understøtter TTS til regionale sprogvarianter
+
+
+  • Forbedringer af synlighed på flere kortformater og Wikipedia
+
+
+  • Understøtter Open Location Code (OLC)
+
+
+  • Få vist grundlæggende elevationprofil for indspillet GPX
+
+
+  • Flere andre forbedringer og fejlrettelser
+
+
+  og mere…
+ "</string>
+	<string name="rendering_attr_depthContours_description">Vis dybdekonturer og punkter</string>
+    <string name="rendering_attr_depthContours_name">Dybdekonturer</string>
+	</resources>

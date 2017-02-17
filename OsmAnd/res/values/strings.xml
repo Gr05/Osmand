@@ -9,6 +9,21 @@
          3. All your modified/created strings are in the top of the file (to make easier find what\'s translated).
     PLEASE: Have a look at http://code.google.com/p/osmand/wiki/UIConsistency, it may really improve your and our work  :-)  Thx - Hardy
     -->
+    <string name="rendering_attr_depthContours_description">Show depth contours and points</string>
+    <string name="rendering_attr_depthContours_name">Depth contours</string>
+	<string name="release_2_6">
+	\u2022 New feature: Quick action button\n\n
+	\u2022 Improved touch screen gesture response\n\n
+	\u2022 New map fonts covering more locales\n\n
+	\u2022 Support TTS for regional language variants\n\n
+	\u2022 Visibility enhancements in several map styles and wikipedia\n\n
+	\u2022 Support Open Location Code (OLC)\n\n
+	\u2022 Display basic elevation profile for recorded GPX\n\n
+	\u2022 Several other improvements and bug fixes\n\n
+	and more…
+	</string>
+	<string name="auto_split_recording_title">Auto-split recordings after gap</string>
+	<string name="auto_split_recording_descr">Start new segment after gap of 6 min, new track after gap of 2 h, or new file after longer gap if date has changed.</string>
     <string name="rendering_attr_contourDensity_description">Contour lines density</string>
     <string name="rendering_attr_contourDensity_name">Contour lines density</string>
     <string name="rendering_value_high_name">High</string>
@@ -59,8 +74,8 @@
     <string name="save_track_min_speed_descr">Set minimum speed for a point to be logged</string>
     <string name="save_track_min_distance">Logging motion detection</string>
     <string name="save_track_min_distance_descr">Set minimum distance from last position for point to be logged</string>
-    <string name="save_track_precision">Logging minimum precision</string>
-    <string name="save_track_precision_descr">Set minimum precision for a point to be logged</string>
+    <string name="save_track_precision">Logging minimum accuracy</string>
+    <string name="save_track_precision_descr">Set minimum accuracy for a point to be logged</string>
     <string name="christmas_poi">Christmas POI</string>
     <string name="christmas_desc">Anticipating Christmas and New Year holidays, you can choose to display the POI associated with Christmas: Christmas trees, markets, etc.</string>
     <string name="christmas_desc_q">Show Christmas POI?</string>
@@ -1197,7 +1212,7 @@
     <string name="local_osm_changes_backup">Backup as OSM change</string>
     <string name="delete_point">Delete Point</string>
     <string name="plugin_distance_point_time">time</string>
-    <string name="plugin_distance_point_hdop">precision</string>
+    <string name="plugin_distance_point_hdop">accuracy</string>
     <string name="plugin_distance_point_speed">speed</string>
     <string name="plugin_distance_point_ele">elevation</string>
     <string name="plugin_distance_point">Point</string>
@@ -2541,7 +2556,7 @@ If you need help with OsmAnd application, please contact our support team: suppo
     <string name="quick_action_map_source_action">Add map source</string>
     <string name="quick_action_map_source_switch">The map source has been changed to \"%s\".</string>
     <string name="quick_action_btn_tutorial_title">Change button position</string>
-    <string name="quick_action_btn_tutorial_descr">Long tap and drag the button to change its position on the screeen</string>
+    <string name="quick_action_btn_tutorial_descr">Long tap and drag the button to change its position on the screen</string>
 	<string name="shared_string_action_name">Action name</string>
     <string name="plugin_traffic_descr">This Greffon allow you to see the traffic jams thanks to a color code</string>
     <string name="plugin_traffic_name">Traffic jams</string>

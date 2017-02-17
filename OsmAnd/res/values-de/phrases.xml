@@ -107,7 +107,7 @@
 	<string name="poi_craft_caterer">Partyservice</string>
 	<string name="poi_cave_entrance">Höhleneingang</string>
 	<string name="poi_cemetery">Friedhof</string>
-	<string name="poi_chalet">Berghütte</string>
+	<string name="poi_chalet">Ferienhaus</string>
 	<string name="poi_charging_station">Ladestation</string>
 	<string name="poi_chemist">Drogerie</string>
 	<string name="poi_chess">Schach</string>
@@ -168,13 +168,13 @@
 	<string name="poi_curtain">Vorhanggeschäft</string>
 	<string name="poi_customs">Zollamt</string>
 	<string name="poi_cycling">Radsport</string>
-	<string name="poi_dairy">Molkerei </string>
+	<string name="poi_dairy">Molkereiprodukte</string>
 	<string name="poi_dam">Staudamm</string>
 	<string name="poi_dance_floor">Tanzfläche</string>
 	<string name="poi_deli">Feinkostgeschäft</string>
 	<string name="poi_dentist">Zahnarzt</string>
 	<string name="poi_department_store">Kaufhaus</string>
-	<string name="poi_dive">Tauchgeschäft</string>
+	<string name="poi_dive">Tauchausrüstung</string>
 	<string name="poi_diving">Tauschen</string>
 	<string name="poi_doctors">Arzt</string>
 	<string name="poi_dog_park">Hundepark</string>
@@ -205,7 +205,7 @@
 	<string name="poi_fire_water_pond">Löschteich</string>
 	<string name="poi_first_aid">Erste Hilfe</string>
 	<string name="poi_leisure_fishing">Fischen</string>
-	<string name="poi_fishing">Angelzeug</string>
+	<string name="poi_fishing">Anglerbedarf</string>
 	<string name="poi_fjord">Fjord</string>
 	<string name="poi_florist">Blumenhandlung</string>
 	<string name="poi_food_court">Markthalle</string>
@@ -257,7 +257,7 @@
 	<string name="poi_hostel">Jugendherberge</string>
 	<string name="poi_hot_spring">Heiße Quellen</string>
 	<string name="poi_hotel">Hotel</string>
-	<string name="poi_houseware">Haushaltsgeräteladen</string>
+	<string name="poi_houseware">Haushaltswaren</string>
 	<string name="poi_hunting">Jagdausrüstung</string>
 	<string name="poi_hunting_stand">Jägerstand</string>
 	<string name="poi_craft_hvac">Heizung, Lüftung und Klimatisierung</string>
@@ -808,7 +808,7 @@
 	<string name="poi_wiki_lang_lv">Lettisches Wiki</string>
 	<string name="poi_wiki_lang_ms">Malaiisches Wiki</string>
 	<string name="poi_wiki_lang_new">Newarisches Wiki</string>
-	<string name="poi_node_networks">Wander-/Radroutenpunkte</string>
+	<string name="poi_node_networks">Wander-/Radwegenetzknoten</string>
 		<string name="poi_hiking_routes">Wanderrouten</string>
 		<string name="poi_traffic_enforcement">Verkehrsüberwachung</string>
 	<string name="poi_cheese">Käsegeschäft</string>
@@ -899,7 +899,7 @@
 
 <string name="poi_free_flying">Gleitschirmgeschäft</string>
 	<string name="poi_bollard">Poller</string>
-	<string name="poi_energy">Energiespeicher</string>
+	<string name="poi_energy">Energieanbieter</string>
 	<string name="poi_stile">Zaunleiter</string>
 	<string name="poi_horse_stile">Zaunübertritt für Pferde</string>
 	<string name="poi_kissing_gate">Schwinggatter</string>
@@ -1352,7 +1352,7 @@
 	<string name="poi_denomination_apostolic">Apostolisch</string>
 	<string name="poi_denomination_reform">Reformierte</string>
 	<string name="poi_denomination_georgian_orthodox">Georgisch-orthodox</string>
-	<string name="poi_denomination_coptic_orthodox">Kopitsch-orthodox</string>
+	<string name="poi_denomination_coptic_orthodox">Koptisch-orthodox</string>
 	<string name="poi_bicycle_parking_stands">Fahrradständer</string>
 	<string name="poi_bicycle_parking_wall_loops">Vorderradständer</string>
 	<string name="poi_leaf_type_mixed">Gemischt</string>
@@ -1767,11 +1767,11 @@
 	<string name="poi_payment_electronic_purses_yes">Elektronische Geldbörsen</string>
 	<string name="poi_payment_uta_yes">UTA</string>
 	<string name="poi_payment_uta_no">UTA Karten nicht akzeptiert</string>
-	<string name="poi_payment_efectivo_yes">Nachnahme</string>
+	<string name="poi_payment_efectivo_yes">Bar</string>
 	<string name="poi_payment_efectivo_no">Nachnahme nicht akzeptiert</string>
 	<string name="poi_payment_girocard_yes">Girokarte</string>
 	<string name="poi_payment_girocard_no">Girokarte nicht akzeptiert</string>
-	<string name="poi_payment_discover_card_yes">Discover Karte</string>
+	<string name="poi_payment_discover_card_yes">Discover-Karte</string>
 	<string name="poi_payment_discover_card_no">Discover Karte nicht akzeptiert</string>
 	<string name="poi_brushless_yes">Ja</string>
 	<string name="poi_parish">Gemeindebüro</string>
@@ -2282,7 +2282,7 @@
 	<string name="poi_sanitary_dump_station_yes">Sanitäre Entsorgungsstation: Ja</string>
 	<string name="poi_sanitary_dump_station_no">Sanitäre Entsorgungsstation: Nein</string>
 	<string name="poi_sanitary_dump_station_customers">Sanitäre Entsorgungsstation: Kunden</string>
-	<string name="poi_refugee_yes">Einrichtungen für Flüchtlinge</string>
+	<string name="poi_refugee_yes">Flüchtlingsunterkunft</string>
 	<string name="poi_social_facility_group_home">Wohngruppe</string>
 	<string name="poi_social_facility_assisted_living">Betreutes Wohnen</string>
 	<string name="poi_social_facility_outreach">Freier Treff</string>
@@ -2754,8 +2754,8 @@
 	<string name="poi_counselling_type_addiction_no">Beratung (Sucht): Nein</string>
 	<string name="poi_counselling_type_antenatal_yes">Beratung (vorgeburtliche): Ja</string>
 	<string name="poi_counselling_type_antenatal_no">Beratung (vorgeburtliche): Nein</string>
-	<string name="poi_counselling_type_child_guidance_yes">Beratung (Erziehungsberatung ): Ja</string>
-	<string name="poi_counselling_type_child_guidance_no">Beratung (Erziehungsberatung ): Nein</string>
+	<string name="poi_counselling_type_child_guidance_yes">Beratung (Erziehung): Ja</string>
+	<string name="poi_counselling_type_child_guidance_no">Beratung (Erziehung): Nein</string>
 	<string name="poi_counselling_type_couple_yes">Beratung (Paar): Ja</string>
 	<string name="poi_counselling_type_couple_no">Beratung (Paar): Nein</string>
 	<string name="poi_counselling_type_crisis_yes">Beratung (Krise): Ja</string>
@@ -2808,7 +2808,7 @@
 
 	<string name="poi_treat_inpatient_yes">Stationäre Dienste: Ja</string>
 	<string name="poi_treat_inpatient_no">Stationäre Dienste: Nein</string>
-	<string name="poi_treat_inpatient_only">Stationäre Dienste: einzig</string>
+	<string name="poi_treat_inpatient_only">Nur Stationäre Dienste</string>
 	<string name="poi_counselling_yes">Beratung: Ja</string>
 	<string name="poi_counselling_no">Beratung: Nein</string>
 	<string name="poi_emergency_yes">Notfall: Ja</string>
@@ -2868,12 +2868,12 @@
 
 	<string name="poi_crossing_activation_automatic">Überquerungsaktivierung: automatisch</string>
 	<string name="poi_crossing_activation_local">Überquerungsaktivierung: lokal</string>
-	<string name="poi_crossing_activation_remote">Überquerungsaktivierung: aus der Entfernung</string>
+	<string name="poi_crossing_activation_remote">Überquerungsaktivierung: mit Fernbedienung</string>
 	<string name="poi_crossing_barrier_no">Kreuzungsbarriere: keine</string>
 	<string name="poi_crossing_barrier_yes">Kreuzungsbarriere</string>
-	<string name="poi_crossing_barrier_full">Schranke: vollständig</string>
+	<string name="poi_crossing_barrier_full">Schranke: komplett</string>
 	<string name="poi_crossing_barrier_half">Schranke: halb</string>
-	<string name="poi_crossing_barrier_double_half">Schranke: doppelte Hälfte</string>
+	<string name="poi_crossing_barrier_double_half">Schranken: 2 halbe</string>
 	<string name="poi_aerodrome_type_international">International</string>
 	<string name="poi_aerodrome_type_regional">Regional</string>
 	<string name="poi_aerodrome_type_public">Öffentlich</string>
@@ -3023,7 +3023,7 @@
 
 	<string name="poi_fuel_avia_type">Typ</string>
 	<string name="poi_payment_fuel_type">Tankkarten</string>
-	<string name="poi_internet_access_type">Internet Zugangsart</string>
+	<string name="poi_internet_access_type">Internet-Zugangsart</string>
 	<string name="poi_clothes_type">Typ</string>
 	<string name="poi_shoes_type">Typ</string>
 	<string name="poi_fire_hydrant_type">Typ</string>
@@ -3173,7 +3173,7 @@
 	<string name="poi_cuisine_waffle">Waffel</string>
 	<string name="poi_cuisine_chocolate">Schokolade</string>
 	<string name="poi_cuisine_wine">Wein</string>
-	<string name="poi_health_specialty">Gesundheit Spezialgebiet</string>
+	<string name="poi_health_specialty">Medizinisches Fachgebiet</string>
 	<string name="poi_massage_type">Massageart</string>
 	<string name="poi_cuisine_pancake">Pfannkuchen</string>
 	<string name="poi_cuisine_fine_dining">Gehobene Küche</string>

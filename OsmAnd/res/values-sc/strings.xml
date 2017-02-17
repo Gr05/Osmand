@@ -1017,8 +1017,8 @@ Memòria in proportzione %4$s MB (lìmite de Android %5$s MB, Dalvik %6$s MB).</
     <string name="keep_informing">Torra a repìtere sas istrutziones de nàvigu</string>
     <string name="pref_raster_map">Impostatziones de sa mitza de sa mapa</string>
     <string name="pref_vector_map">Impostatziones de sa mapa vetoriale</string>
-    <string name="city_type_hamlet">Bidda</string>
-    <string name="city_type_village">Bidditzolu</string>
+    <string name="city_type_hamlet">Bidditzolu</string>
+    <string name="city_type_village">Bidda</string>
     <string name="city_type_town">Tzidadina</string>
     <string name="city_type_city">Tzitade</string>
 
@@ -1170,7 +1170,7 @@ Memòria in proportzione %4$s MB (lìmite de Android %5$s MB, Dalvik %6$s MB).</
     <string name="pref_vector_rendering">Optziones dislindadas pro su disinnu vetoriale</string>
     <string name="pref_overlay">Subrapositzione / isfundu</string>
     <string name="delete_confirmation_msg">Iscantzellare %1$s?</string>
-    <string name="city_type_suburb">Bighinadu - apendìtziu</string>
+    <string name="city_type_suburb">Trighinzu - apendìtziu</string>
 
     <string name="file_can_not_be_renamed">Su documentu non podet èssere torrau a numenare.</string>
     <string name="poi_query_by_name_matches_categories">Agatadas categorias PDI chi ispricant sa chirca:</string>
@@ -2722,7 +2722,7 @@ Si istimas OsmAnd e OSM e los boles suportare, custa est una manera perfeta pro 
     <string name="quick_action_add_configure_map">Configura sa mapa</string>
     <string name="quick_action_add_navigation">Nàvigu</string>
     <string name="quick_action_fav_name_descr">Lassa bòidu pro impreare automaticamente s\'indiritzu o su nùmene de su logu</string>
-    <string name="quick_action_bug_descr">Custu messàgiu at a èssere cumpridu automaticamente in su logu pro sos cummentos.</string>
+    <string name="quick_action_bug_descr">Custu testu at a èssere cumpridu automaticamente in su logu pro sos cummentos.</string>
     <string name="quick_action_bug_message">Messàgiu</string>
     <string name="quick_action_category_descr">Issèbera sa categoria in ue sarbare su preferidu</string>
     <string name="quick_action_gpx_category_descr">Issèbera una categoria optzionale</string>
@@ -2734,7 +2734,7 @@ Si istimas OsmAnd e OSM e los boles suportare, custa est una manera perfeta pro 
     <string name="quick_action_map_overlay">Acontza sos istratos superiores de sa mapa</string>
     <string name="quick_action_map_overlay_title">Istratos superiores de sa mapa</string>
     <string name="quick_action_map_overlay_action">Annaghe un\'istratu superiore</string>
-    <string name="quick_action_map_underlay">Annaghe un\'istratu inferiore</string>
+    <string name="quick_action_map_underlay">Muda s\'istratu inferiore</string>
     <string name="quick_action_map_underlay_action">Annanghe un\'istratu inferiore</string>
     <string name="quick_action_map_underlay_title">Istratos inferiores de sa mapa</string>
     <string name="quick_action_map_source">Muda sa mitza de sa mapa</string>
@@ -2753,4 +2753,36 @@ Pro praghere iscrie su còdighe intreu</string>
 Àrea rapresentada: %1$s x %2$s</string>
     <string name="quick_action_map_overlay_switch">S\'istradu superiore de sa mapa est istadu cambiadu in \"%s\".</string>
     <string name="quick_action_map_underlay_switch">S\'istratu inferiore de sa mapa est istadu cambiadu in \"%s\".</string>
+    <string name="auto_split_recording_title">Iscroba automaticamente sas registratziones</string>
+	<string name="auto_split_recording_descr">Incumintza unu segmentu nou a pustis de una pàusa de 6 minutos, una rasta noa a pustis de 2 oras o unu documentu nou si sa pàusa est istada prus longa e sa data est cambiada.</string>
+    <string name="quick_action_page_list_descr">Incarchende su butone pro s\'atzione as a cùrrere pro sa lista in suta.</string>
+    <string name="release_2_6">"
+ • Funtzionalidae noa: Butone pro sas atziones lestras
+
+
+ • Megioramentu de sa risposta de s\'ichermu a sos incarcos
+
+
+ • Caràteres noos pro sa mapa, chi ant a permìtere de tènnere prus limbas
+
+
+ • Suportu TTS pro variantes regionales de sas limbas
+
+
+ • Megioramentos a sa visibilidade pro meda istiles de sa mapa e pro wikipedia
+
+
+ • Suportu pro su \"Còdighe Abertu pro sa Positzione\" (Open Location Code  - OLC)
+
+
+ • Visualizatzione basilare pro sos profilos de s\'artària pro sas rastas GPX regitradas
+
+
+ • Meda àteros megioramentos e curretziones de errores
+
+
+ e àteru…
+ "</string>
+	<string name="rendering_attr_depthContours_name">Lìnias de profondidade</string>
+	<string name="rendering_attr_depthContours_description">Ammustra sas lìnias de profondidade</string>
     </resources>
