@@ -9,6 +9,7 @@ import net.osmand.plus.render.RendererRegistry;
 
 public class TrafficPlugin extends OsmandPlugin {
 
+	/*test CI*/
 	public static final String ID = "traffic.plugin";
 	public static final String COMPONENT = "net.osmand.TrafficPlugin";
 	private OsmandApplication app;
