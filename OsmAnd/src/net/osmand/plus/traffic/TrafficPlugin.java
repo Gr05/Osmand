@@ -47,7 +47,7 @@ public class TrafficPlugin extends OsmandPlugin {
 		if(activity != null) {
 			// called from UI 
 			previousRenderer = app.getSettings().RENDERER.get(); 
-			app.getSettings().RENDERER.set(RendererRegistry.WINTER_SKI_RENDER);
+			app.getSettings().RENDERER.set(RendererRegistry.TRAFFIC_RENDER);
 		}
 		return true;
 	}
@@ -55,7 +55,7 @@ public class TrafficPlugin extends OsmandPlugin {
 	@Override
 	public void disable(OsmandApplication app) {
 		super.disable(app);
-		if(app.getSettings().RENDERER.get().equals(RendererRegistry.WINTER_SKI_RENDER)) {
+		if(app.getSettings().RENDERER.get().equals(RendererRegistry.TRAFFIC_RENDER)) {
 			app.getSettings().RENDERER.set(previousRenderer);
 		}
 	}
