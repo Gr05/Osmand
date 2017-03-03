@@ -5,7 +5,11 @@ import android.app.Activity;
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandPlugin;
 import net.osmand.plus.R;
+import net.osmand.plus.activities.MapActivity;
+import net.osmand.plus.parkingpoint.ParkingPositionLayer;
 import net.osmand.plus.render.RendererRegistry;
+import net.osmand.plus.views.MapInfoLayer;
+import net.osmand.plus.views.OsmandMapTileView;
 
 public class TrafficPlugin extends OsmandPlugin {
 
@@ -14,6 +18,7 @@ public class TrafficPlugin extends OsmandPlugin {
 	public static final String COMPONENT = "net.osmand.TrafficPlugin";
 	private OsmandApplication app;
 	private String previousRenderer = RendererRegistry.DEFAULT_RENDER;
+	private TrafficLayer trafficLayer;
 
 	public TrafficPlugin(OsmandApplication app) {
 		this.app = app;
@@ -70,4 +75,29 @@ public class TrafficPlugin extends OsmandPlugin {
 	public Class<? extends Activity> getSettingsActivity() {
 		return null;
 	}
+
+	@Override
+	public void registerLayers(MapActivity activity) {
+		// remove old if existing after turn
+		if(trafficLayer != null) {
+			activity.getMapView().removeLayer(trafficLayer);
+		}
+		trafficLayer = new TrafficLayer(activity, this);
+		activity.getMapView().addLayer(trafficLayer, 5.5f);
+	}
+
+	@Override
+	public void updateLayers(OsmandMapTileView mapView, MapActivity activity) {
+		if (isActive()) {
+			if (trafficLayer == null) {
+				registerLayers(activity);
+			}
+		} else {
+			if (trafficLayer != null) {
+				activity.getMapView().removeLayer(trafficLayer);
+				trafficLayer = null;
+			}
+		}
+	}
 }
+
