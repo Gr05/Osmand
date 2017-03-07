@@ -78,3 +78,36 @@ OsmAnd is open source and actively being developed. Everyone can contribute to t
 ##### List of countries supported
 Basically world wide: Afghanistan, Albania, Algeria, Andorra, Angola, Anguilla, Antigua and Barbuda, Argentina, Armenia, Aruba, Australia, Austria, Azerbaijan, Bahamas, Bahrain, Bangladesh, Barbados, Belarus, Belgium, Belize, Benin, Bermuda, Bhutan, Bolivia, Bonaire, Bosnia and Herzegovina, Botswana, Brazil, British Virgin Islands, Brunei, Bulgaria, Burkina Faso, Burundi, Cambodia, Cameroon, Canada, Cape Verde, Central African Republic, Chad, Chile, China, Colombia, Comoros, Congo, Costa Rica, Ivory Coast, Croatia, Cuba, Curaçao, Cyprus, Czech Republic, Denmark, Djibouti, Dominica, Dominican Republic, Ecuador, Egypt, El Salvador, Equatorial Guinea, Eritrea, Estonia, Ethiopia, Fiji, Finland, France, French Guiana, French Polynesia, Gabon, Gambia, Georgia, Germany, Ghana, Gibraltar, Greece, Greenland, Grenada, Guadeloupe, Guam, Guatemala, Guernsey, Guinea, Guinea-Bissau, Guyana, Haiti, Vatican, Honduras, Hong Kong, Hungary, Iceland, India, Indonesia, Iran, Iraq, Ireland, Isle of Man, Israel, Italy, Jamaica, Japan, Jersey, Jordan, Kazakhstan, Kenya, Kiribati, North Korea and South Korea, Kuwait, Kyrgyzstan, Laos, Latvia, Lebanon, Lesotho, Liberia, Libya, Liechtenstein, Lithuania, Luxembourg, Macao, Macedonia, Madagascar, Malawi, Malaysia, Maldives, Mali, Malta, Martinique, Mauritania, Mauritius, Mayotte, Mexico, Micronesia, Moldova, Monaco, Mongolia, Montenegro, Montserrat, Morocco, Mozambique, Myanmar, Namibia, Nauru, Nepal, Netherlands, Netherlands Antilles, New Caledonia, New Zealand, Nicaragua, Niger, Nigeria, Norway, Oman, Pakistan, Palau, Palestinian Territory, Panama, Papua New Guinea, Paraguay, Peru, Philippines, Poland, Portugal, Puerto Rico, Qatar, Romania, Russia, Rwanda, Saint Barthelemy, Saint Helena, Saint Kitts and Nevis, Saint Lucia, Saint Martin, Saint Pierre and Miquelon, Saint Vincent and the Grenadines, Samoa, San Marino, Saudi Arabia, Senegal, Serbia, Seychelles, Sierra Leone, Singapore, Slovakia, Slovenia, Somalia, South Africa, South Georgia, South Sudan, Spain, Sri Lanka, Sudan, Suriname, Swaziland, Sweden, Switzerland, Syria, Taiwan, Tajikistan, Tanzania, Thailand, Timor-Leste, Togo, Tokelau, Tonga, Trinidad and Tobago, Tunisia, Turkey, Turkmenistan, Tuvalu, Uganda, Ukraine, United Arab Emirates, United Kingdom (UK), United States of America (USA), Uruguay, Uzbekistan, Vanuatu, Venezuela, Vietnam, Wallis and Futuna, Western Sahara, Yemen, Zambia, Zimbabwe.
 </p>
+
+-----------------------------------------------------
+
+# Projet : grenoblois futé
+
+### Installation du projet
+
+Installer ce projet pour fonctionner avec android studio est assez compliqué et pas forcément très bien documenté. Pour installer ce projet voici les étapes à suivre.
+
+1. Mise en place des variables d'environnement
+
+		export ANDROID_SDK=/[your-path]/Android/sdk
+		export ANDROID_NDK=/[your-path]/android-ndk-r10e
+ 		export ANDROID_HOME=/[your-path]/Library/Android/sdk
+ 		export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
+
+2. Récupération du code du projet et des ressources annexes
+
+		$ mkdir Osmand
+        $ cd Osmand
+
+        $ git clone https://github.com/osmandapp/OsmAnd-resources.git
+        # Rename the ressources
+        mv OsmAnd-resources/ resources
+
+        # Checkout the Source Code
+        $ git clone https://github.com/osmandapp/Osmand.git
+
+        # Build the repo on the commandline to make sure everything works as expected
+        $ cd OsmAnd
+        $ ./gradlew --refresh-dependencies clean assembleFullLegacyFatDebug
+
+        # Make sure that you see: BUILD SUCCESSFUL
