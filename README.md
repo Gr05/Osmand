@@ -81,20 +81,20 @@ Basically world wide: Afghanistan, Albania, Algeria, Andorra, Angola, Anguilla, 
 
 -----------------------------------------------------
 
-# Projet : grenoblois futé
+# Project : grenoblois futé
 
-### Installation du projet
+### Installation instructions
 
-Installer ce projet pour fonctionner avec android studio est assez compliqué et pas forcément très bien documenté. Pour installer ce projet voici les étapes à suivre.
+Installing and setting up this project to work with android studio is not long. Please follow instructions carefully.
 
-1. Mise en place des variables d'environnement
+1. Setting up environement
 
 		export ANDROID_SDK=/[your-path]/Android/sdk
 		export ANDROID_NDK=/[your-path]/android-ndk-r10e
  		export ANDROID_HOME=/[your-path]/Library/Android/sdk
  		export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
 
-2. Récupération du code du projet et des ressources annexes
+2. Retrieving sources and dependencies
 
 		$ mkdir Osmand
         $ cd Osmand
