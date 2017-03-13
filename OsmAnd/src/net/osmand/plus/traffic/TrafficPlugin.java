@@ -1,6 +1,8 @@
 package net.osmand.plus.traffic;
 
 import android.app.Activity;
+import android.os.StrictMode;
+import android.util.Log;
 
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandPlugin;
@@ -10,6 +12,18 @@ import net.osmand.plus.parkingpoint.ParkingPositionLayer;
 import net.osmand.plus.render.RendererRegistry;
 import net.osmand.plus.views.MapInfoLayer;
 import net.osmand.plus.views.OsmandMapTileView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class TrafficPlugin extends OsmandPlugin {
 
@@ -51,9 +65,11 @@ public class TrafficPlugin extends OsmandPlugin {
 	@Override
 	public boolean init(final OsmandApplication app, final Activity activity) {
 		if(activity != null) {
-			// called from UI 
-			previousRenderer = app.getSettings().RENDERER.get(); 
+			// called from UI
+			Log.d("DEBUG : ", "dans la méthode INIT");
+			previousRenderer = app.getSettings().RENDERER.get();
 			app.getSettings().RENDERER.set(RendererRegistry.TRAFFIC_RENDER);
+			traficParser();
 		}
 		return true;
 	}
@@ -66,7 +82,64 @@ public class TrafficPlugin extends OsmandPlugin {
 		}
 	}
 
-	@Override
+	/*
+	Timer timer = new Timer ();
+	TimerTask hourlyTask = new TimerTask () {
+		@Override
+		public void run () {
+			// your code here...
+		}
+	};
+
+	// schedule the task to run starting now and then every hour...
+	timer.schedule (hourlyTask, 0l, 1000*60*60);   // 1000*10*60 every 10 minut
+	 */
+
+	/* Parser */
+	public void traficParser(){
+		String result = null;
+        try {
+			Log.d("DEBUG", "Dans le premier try");
+            URL url = new URL("http://data.metromobilite.fr/api/troncons/json");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            try {
+				Log.d("DEBUG", "Dans le deuxième try");
+				int SDK_INT = android.os.Build.VERSION.SDK_INT;
+				if (SDK_INT > 8){
+					StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+							.permitAll().build();
+					StrictMode.setThreadPolicy(policy);
+					InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+					BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"), 8);
+					StringBuilder sb = new StringBuilder();
+					String line = null;
+					while ((line = reader.readLine()) != null) {
+						Log.d("DEBUG", "Dans le while");
+						sb.append(line + "\n");
+					}
+					result = sb.toString();
+					try {
+						Log.d("DEBUG", "Dans le troisième try");
+						Log.d("DEBUG : ", result);
+						JSONObject jObject = new JSONObject(result);
+						Log.d("DEBUG : ", jObject.toString(4));
+					} catch (JSONException e) {
+						Log.e("ERREUR (3e try) : ", e.getMessage(), e);
+					}
+				}
+            } catch (Exception e) {
+				Log.e("ERREUR (2e try) : ", e.getMessage(), e);
+            } finally {
+                urlConnection.disconnect();
+            }
+        } catch (Exception e) {
+			Log.e("ERREUR (1er try) : ", e.getMessage(), e);
+        }
+    }
+
+
+
+    @Override
 	public String getId() {
 		return ID;
 	}
