@@ -1,6 +1,7 @@
 package net.osmand.plus.traffic;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 
@@ -69,7 +70,8 @@ public class TrafficPlugin extends OsmandPlugin {
 			Log.d("DEBUG : ", "dans la méthode INIT");
 			previousRenderer = app.getSettings().RENDERER.get();
 			app.getSettings().RENDERER.set(RendererRegistry.TRAFFIC_RENDER);
-			traficParser();
+			// traficParser();
+			startRepeatingGetTrafficInfo();
 		}
 		return true;
 	}
@@ -94,6 +96,29 @@ public class TrafficPlugin extends OsmandPlugin {
 	// schedule the task to run starting now and then every hour...
 	timer.schedule (hourlyTask, 0l, 1000*60*60);   // 1000*10*60 every 10 minut
 	 */
+
+	private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
+	Handler mHandler = new Handler();
+
+	Runnable mHandlerTask = new Runnable() {
+		@Override
+		public void run() {
+			traficParser();
+			mHandler.postDelayed(mHandlerTask, INTERVAL);
+		}
+	};
+
+	void startRepeatingGetTrafficInfo()
+	{
+		mHandlerTask.run();
+	}
+
+	void stopRepeatingGetTrafficInfo()
+	{
+		mHandler.removeCallbacks(mHandlerTask);
+	}
+
+
 
 	/* Parser */
 	public void traficParser(){
@@ -162,6 +187,7 @@ public class TrafficPlugin extends OsmandPlugin {
 	@Override
 	public void updateLayers(OsmandMapTileView mapView, MapActivity activity) {
 		if (isActive()) {
+			startRepeatingGetTrafficInfo();
 			if (trafficLayer == null) {
 				registerLayers(activity);
 			}
