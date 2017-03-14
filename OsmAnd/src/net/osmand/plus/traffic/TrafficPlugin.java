@@ -15,6 +15,7 @@ import net.osmand.plus.render.RendererRegistry;
 import net.osmand.plus.views.MapInfoLayer;
 import net.osmand.plus.views.OsmandMapTileView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +30,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class TrafficPlugin extends OsmandPlugin {
 
@@ -37,7 +39,7 @@ public class TrafficPlugin extends OsmandPlugin {
 	private OsmandApplication app;
 	private String previousRenderer = RendererRegistry.DEFAULT_RENDER;
 	private TrafficLayer trafficLayer;
-	private Context context;
+	private ArrayList<Troncon> troncons = new ArrayList<Troncon>();
 
 	public TrafficPlugin(OsmandApplication app) {
 		this.app = app;
@@ -67,6 +69,83 @@ public class TrafficPlugin extends OsmandPlugin {
 		return "feature_articles/traffic_plugin.html";
 	}
 
+	public class Point {
+		private float x;
+		private float y;
+
+		public Point(float coorX, float coorY){
+			this.x = coorX;
+			this.y = coorY;
+		}
+
+		public float getX() {
+			return this.x;
+		}
+
+		public float getY() {
+			return this.y;
+		}
+	}
+
+	public class Troncon {
+		private ArrayList<Point> etapes = new ArrayList<Point>();
+		private int charge;
+
+		public Troncon(int charge){
+			this.charge = charge;
+		}
+
+		public void addEtape(Point point){
+			this.etapes.add(point);
+		}
+
+		public void printTroncon(){
+			Log.d("DEBUG : ", "Troncon");
+			for (int i = 0; i < this.etapes.size(); i ++){
+				Log.d("DEBUG : ", "valeur de X : " + etapes.get(i).getX() + " || valeur de Y : "
+				+ etapes.get(i).getY());
+
+			}
+		}
+	}
+
+	public void printTroncons(){
+		for (int i = 0; i < this.troncons.size(); i++){
+			this.troncons.get(i).printTroncon();
+		}
+	}
+
+	public void parseTrafficData(JSONObject data){
+		Log.d("DEBUG : ", "Dans le parseur");
+		JSONArray features = null;
+		this.troncons.clear();
+		try {
+			features = data.getJSONArray("features");
+		} catch (JSONException e) {
+			Log.e("ERREUR", e.getMessage(), e);
+		}
+		for(int i=0;i<features.length();i++){
+			try {
+				JSONObject feature = features.getJSONObject(i);
+				JSONObject properties = feature.getJSONObject("properties");
+				JSONObject geometry = feature.getJSONObject("geometry");
+				String niveau = properties.getString("NIVEAU");
+				Troncon troncon = new Troncon(Integer.parseInt(niveau));
+				JSONArray coordinates = geometry.getJSONArray("coordinates");
+				for (int j=0; j < coordinates.length(); j++){
+					JSONArray coordinate = coordinates.getJSONArray(j);
+					float coordianteX = Float.parseFloat(coordinate.getString(0));
+					float coordianteY = Float.parseFloat(coordinate.getString(1));
+					Point point = new Point (coordianteX, coordianteY);
+					troncon.addEtape(point);
+				}
+				this.troncons.add(troncon);
+			} catch (JSONException e) {
+				Log.e("ERREUR", e.getMessage(), e);
+			}
+		}
+	}
+
 	public boolean writeCacheFile(String data){
 		String filename = "trafficCache.json";
 		String JSONdata = data;
@@ -94,11 +173,9 @@ public class TrafficPlugin extends OsmandPlugin {
 				BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 				String receiveString = "";
 				StringBuilder stringBuilder = new StringBuilder();
-
 				while ( (receiveString = bufferedReader.readLine()) != null ) {
 					stringBuilder.append(receiveString);
 				}
-
 				inputStream.close();
 				JSONdata = stringBuilder.toString();
 			}
@@ -118,7 +195,6 @@ public class TrafficPlugin extends OsmandPlugin {
 			Log.d("DEBUG : ", "dans la méthode INIT");
 			previousRenderer = app.getSettings().RENDERER.get();
 			app.getSettings().RENDERER.set(RendererRegistry.TRAFFIC_RENDER);
-			// traficParser();
 			startRepeatingGetTrafficInfo();
 		}
 		return true;
@@ -132,13 +208,13 @@ public class TrafficPlugin extends OsmandPlugin {
 		}
 	}
 
-	private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
+	private final static int INTERVAL = 1000 * 30 * 1; //30 seconds (ms * s * min)
 	Handler mHandler = new Handler();
 
 	Runnable mHandlerTask = new Runnable() {
 		@Override
 		public void run() {
-			traficParser();
+			getTrafficInfo();
 			mHandler.postDelayed(mHandlerTask, INTERVAL);
 		}
 	};
@@ -154,7 +230,7 @@ public class TrafficPlugin extends OsmandPlugin {
 	}
 
 	/* Parser */
-	public void traficParser(){
+	public void getTrafficInfo(){
 		String result = null;
         try {
 			Log.d("DEBUG", "Dans le premier try");
@@ -179,13 +255,16 @@ public class TrafficPlugin extends OsmandPlugin {
 					result = sb.toString();
 					try {
 						Log.d("DEBUG", "Dans le troisième try");
-						Log.d("DEBUG : ", result);
+						// Log.d("DEBUG : ", result);
 						writeCacheFile(result);
 						jObject = new JSONObject(result);
-						Log.d("DEBUG : HORS LIGNE", jObject.toString(4));
+						// Log.d("DEBUG : ", jObject.toString(4));
+						parseTrafficData(jObject);
+						//printTroncons();
 					} catch (JSONException e) {
 						Log.e("ERREUR (3e try) : ", e.getMessage(), e);
 					}
+					in.close();
 				}
             } catch (Exception e) {
 				Log.e("ERREUR (2e try) : ", e.getMessage(), e);
@@ -194,7 +273,9 @@ public class TrafficPlugin extends OsmandPlugin {
 				 */
 				result = getCacheFileContent();
 				jObject = new JSONObject(result);
-				Log.d("DEBUG : HORS-LIGNE", jObject.toString(4));
+				parseTrafficData(jObject);
+				printTroncons();
+				// Log.d("DEBUG : HORS-LIGNE", jObject.toString(4));
             } finally {
                 urlConnection.disconnect();
             }
