@@ -208,7 +208,7 @@ public class TrafficPlugin extends OsmandPlugin {
 		}
 	}
 
-	private final static int INTERVAL = 1000 * 30 * 1; //30 seconds (ms * s * min)
+	private final static int INTERVAL = 1000 * 60 * 2; //2 minutes (ms * s * min)
 	Handler mHandler = new Handler();
 
 	Runnable mHandlerTask = new Runnable() {
@@ -229,7 +229,7 @@ public class TrafficPlugin extends OsmandPlugin {
 		mHandler.removeCallbacks(mHandlerTask);
 	}
 
-	/* Parser */
+	/* Retrieving of traffic informations either on web or cache file */
 	public void getTrafficInfo(){
 		String result = null;
         try {
