@@ -107,6 +107,10 @@ public class TrafficPlugin extends OsmandPlugin {
 
 			}
 		}
+
+		public ArrayList<Point> getEtapes(){
+			return this.etapes;
+		}
 	}
 
 	public void printTroncons(){
