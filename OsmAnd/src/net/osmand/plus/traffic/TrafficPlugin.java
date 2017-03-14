@@ -1,6 +1,7 @@
 package net.osmand.plus.traffic;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
@@ -19,6 +20,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,12 +32,12 @@ import java.net.URL;
 
 public class TrafficPlugin extends OsmandPlugin {
 
-	/*test CI*/
 	public static final String ID = "traffic.plugin";
 	public static final String COMPONENT = "net.osmand.TrafficPlugin";
 	private OsmandApplication app;
 	private String previousRenderer = RendererRegistry.DEFAULT_RENDER;
 	private TrafficLayer trafficLayer;
+	private Context context;
 
 	public TrafficPlugin(OsmandApplication app) {
 		this.app = app;
@@ -63,6 +67,50 @@ public class TrafficPlugin extends OsmandPlugin {
 		return "feature_articles/traffic_plugin.html";
 	}
 
+	public boolean writeCacheFile(String data){
+		String filename = "trafficCache.json";
+		String JSONdata = data;
+		FileOutputStream outputStream;
+		try {
+			outputStream =  app.openFileOutput(filename, Context.MODE_PRIVATE);
+			outputStream.write(JSONdata.getBytes());
+			outputStream.close();
+			Log.d("DEBUG : ", "Fichier normalement écrit");
+		} catch (Exception e) {
+			Log.e("ERREUR : ", e.getMessage(), e);
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public String getCacheFileContent(){
+		String filename = "trafficCache.json";
+		String JSONdata = null;
+		try {
+			InputStream inputStream = app.openFileInput(filename);
+			if ( inputStream != null ) {
+				InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+				BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+				String receiveString = "";
+				StringBuilder stringBuilder = new StringBuilder();
+
+				while ( (receiveString = bufferedReader.readLine()) != null ) {
+					stringBuilder.append(receiveString);
+				}
+
+				inputStream.close();
+				JSONdata = stringBuilder.toString();
+			}
+		}
+		catch (FileNotFoundException e) {
+			Log.e("login activity", "File not found: " + e.toString());
+		} catch (IOException e) {
+			Log.e("login activity", "Can not read file: " + e.toString());
+		}
+		return JSONdata;
+	}
+
 	@Override
 	public boolean init(final OsmandApplication app, final Activity activity) {
 		if(activity != null) {
@@ -83,19 +131,6 @@ public class TrafficPlugin extends OsmandPlugin {
 			app.getSettings().RENDERER.set(previousRenderer);
 		}
 	}
-
-	/*
-	Timer timer = new Timer ();
-	TimerTask hourlyTask = new TimerTask () {
-		@Override
-		public void run () {
-			// your code here...
-		}
-	};
-
-	// schedule the task to run starting now and then every hour...
-	timer.schedule (hourlyTask, 0l, 1000*60*60);   // 1000*10*60 every 10 minut
-	 */
 
 	private final static int INTERVAL = 1000 * 60 * 2; //2 minutes
 	Handler mHandler = new Handler();
@@ -118,8 +153,6 @@ public class TrafficPlugin extends OsmandPlugin {
 		mHandler.removeCallbacks(mHandlerTask);
 	}
 
-
-
 	/* Parser */
 	public void traficParser(){
 		String result = null;
@@ -127,6 +160,7 @@ public class TrafficPlugin extends OsmandPlugin {
 			Log.d("DEBUG", "Dans le premier try");
             URL url = new URL("http://data.metromobilite.fr/api/troncons/json");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			JSONObject jObject = null;
             try {
 				Log.d("DEBUG", "Dans le deuxième try");
 				int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -146,14 +180,21 @@ public class TrafficPlugin extends OsmandPlugin {
 					try {
 						Log.d("DEBUG", "Dans le troisième try");
 						Log.d("DEBUG : ", result);
-						JSONObject jObject = new JSONObject(result);
-						Log.d("DEBUG : ", jObject.toString(4));
+						writeCacheFile(result);
+						jObject = new JSONObject(result);
+						Log.d("DEBUG : HORS LIGNE", jObject.toString(4));
 					} catch (JSONException e) {
 						Log.e("ERREUR (3e try) : ", e.getMessage(), e);
 					}
 				}
             } catch (Exception e) {
 				Log.e("ERREUR (2e try) : ", e.getMessage(), e);
+				/*
+					Traitement à partir du fichier cache
+				 */
+				result = getCacheFileContent();
+				jObject = new JSONObject(result);
+				Log.d("DEBUG : HORS-LIGNE", jObject.toString(4));
             } finally {
                 urlConnection.disconnect();
             }
@@ -192,6 +233,7 @@ public class TrafficPlugin extends OsmandPlugin {
 				registerLayers(activity);
 			}
 		} else {
+			stopRepeatingGetTrafficInfo();
 			if (trafficLayer != null) {
 				activity.getMapView().removeLayer(trafficLayer);
 				trafficLayer = null;
