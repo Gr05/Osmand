@@ -87,28 +87,57 @@ public class TrafficPlugin extends OsmandPlugin {
 		}
 	}
 
-	public class Troncon {
-		private ArrayList<Point> etapes = new ArrayList<Point>();
+	public class SsTroncon {
+		private Point from;
+		private Point to;
 		private int charge;
 
-		public Troncon(int charge){
+		public SsTroncon (Point from, Point to, int charge) {
 			this.charge = charge;
+			this.from = from;
+			this.to = to;
 		}
 
-		public void addEtape(Point point){
-			this.etapes.add(point);
+		public Point getFrom(){
+			return this.from;
+		}
+
+		public Point getTo(){
+			return this.to;
+		}
+
+		public int getCharge(){
+			return this.charge;
+		}
+
+		@Override
+		public String toString(){
+			return "Tronçon qui va de " + getFrom().getX() + " || " + getFrom().getY() +
+					" -- à -- " + getTo().getX() + " || " + getTo().getY() +
+					" ##### CHARGE : ####### " + getCharge();
+		}
+	}
+
+	public class Troncon {
+		private ArrayList<SsTroncon> etapes = new ArrayList<SsTroncon>();
+		private String identifiant;
+
+		public Troncon(String identifiant){
+			this.identifiant = identifiant;
+		}
+
+		public void addEtape(SsTroncon ssTrc){
+			this.etapes.add(ssTrc);
 		}
 
 		public void printTroncon(){
 			Log.d("DEBUG : ", "Troncon");
 			for (int i = 0; i < this.etapes.size(); i ++){
-				Log.d("DEBUG : ", "valeur de X : " + etapes.get(i).getX() + " || valeur de Y : "
-				+ etapes.get(i).getY());
-
+				Log.d("DEBUG : ", etapes.get(i).toString());
 			}
 		}
 
-		public ArrayList<Point> getEtapes(){
+		public ArrayList<SsTroncon> getEtapes(){
 			return this.etapes;
 		}
 	}
@@ -119,12 +148,13 @@ public class TrafficPlugin extends OsmandPlugin {
 		}
 	}
 
-	public void parseTrafficData(JSONObject data){
+	public void parseTrafficData(JSONObject dataRout){
 		Log.d("DEBUG : ", "Dans le parseur");
 		JSONArray features = null;
+		JSONArray traffic = null;
 		this.troncons.clear();
 		try {
-			features = data.getJSONArray("features");
+			features = dataRout.getJSONArray("features");
 		} catch (JSONException e) {
 			Log.e("ERREUR", e.getMessage(), e);
 		}
@@ -133,15 +163,22 @@ public class TrafficPlugin extends OsmandPlugin {
 				JSONObject feature = features.getJSONObject(i);
 				JSONObject properties = feature.getJSONObject("properties");
 				JSONObject geometry = feature.getJSONObject("geometry");
+				String identifiant = properties.getString("id");
 				String niveau = properties.getString("NIVEAU");
-				Troncon troncon = new Troncon(Integer.parseInt(niveau));
+				Troncon troncon = new Troncon(identifiant);
 				JSONArray coordinates = geometry.getJSONArray("coordinates");
-				for (int j=0; j < coordinates.length(); j++){
-					JSONArray coordinate = coordinates.getJSONArray(j);
-					float coordianteX = Float.parseFloat(coordinate.getString(0));
-					float coordianteY = Float.parseFloat(coordinate.getString(1));
-					Point point = new Point (coordianteX, coordianteY);
-					troncon.addEtape(point);
+				for (int j=0; j < coordinates.length() - 1; j++){
+					JSONArray coordinateFrom = coordinates.getJSONArray(j);
+					float coordianteXFrom = Float.parseFloat(coordinateFrom.getString(0));
+					float coordianteYFrom = Float.parseFloat(coordinateFrom.getString(1));
+					Point pointFrom = new Point (coordianteXFrom, coordianteYFrom);
+					JSONArray coordinateTo = coordinates.getJSONArray(j+1);
+					float coordianteXTo = Float.parseFloat(coordinateTo.getString(0));
+					float coordianteYTo = Float.parseFloat(coordinateTo.getString(1));
+					Point pointTo = new Point (coordianteXTo, coordianteYTo);
+					SsTroncon subTronc = new SsTroncon(
+							pointFrom, pointTo, Integer.parseInt(niveau));
+					troncon.addEtape(subTronc);
 				}
 				this.troncons.add(troncon);
 			} catch (JSONException e) {
@@ -264,7 +301,7 @@ public class TrafficPlugin extends OsmandPlugin {
 						jObject = new JSONObject(result);
 						// Log.d("DEBUG : ", jObject.toString(4));
 						parseTrafficData(jObject);
-						//printTroncons();
+						printTroncons();
 					} catch (JSONException e) {
 						Log.e("ERREUR (3e try) : ", e.getMessage(), e);
 					}
