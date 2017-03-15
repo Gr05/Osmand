@@ -112,8 +112,8 @@ public class TrafficPlugin extends OsmandPlugin {
 
 		@Override
 		public String toString(){
-			return "Tronçon qui va de " + getFrom().getX() + " || " + getFrom().getY() +
-					" -- à -- " + getTo().getX() + " || " + getTo().getY() +
+			return "Tronçon qui va de " + getFrom().getLon() + " || " + getFrom().getLat() +
+					" -- à -- " + getTo().getLon() + " || " + getTo().getLat() +
 					" ##### CHARGE : ####### " + getCharge();
 		}
 	}
