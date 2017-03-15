@@ -70,8 +70,8 @@ public class TrafficPlugin extends OsmandPlugin {
 	}
 
 	public class Point {
-		private float x;
-		private float y;
+		private float x; // longitude
+		private float y; // latitude
 
 		public Point(float coorX, float coorY){
 			this.x = coorX;
