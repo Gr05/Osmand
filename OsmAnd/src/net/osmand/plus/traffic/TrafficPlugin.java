@@ -142,6 +142,10 @@ public class TrafficPlugin extends OsmandPlugin {
 		}
 	}
 
+    public ArrayList<Troncon> getTroncons(){
+        return this.troncons;
+    }
+
 	public void printTroncons(){
 		for (int i = 0; i < this.troncons.size(); i++){
 			this.troncons.get(i).printTroncon();
@@ -301,7 +305,7 @@ public class TrafficPlugin extends OsmandPlugin {
 						jObject = new JSONObject(result);
 						// Log.d("DEBUG : ", jObject.toString(4));
 						parseTrafficData(jObject);
-						printTroncons();
+						//printTroncons();
 					} catch (JSONException e) {
 						Log.e("ERREUR (3e try) : ", e.getMessage(), e);
 					}
@@ -344,7 +348,7 @@ public class TrafficPlugin extends OsmandPlugin {
 			activity.getMapView().removeLayer(trafficLayer);
 		}
 		trafficLayer = new TrafficLayer(activity, this);
-		activity.getMapView().addLayer(trafficLayer, 5.5f);
+		activity.getMapView().addLayer(trafficLayer, 12f);
 	}
 
 	@Override

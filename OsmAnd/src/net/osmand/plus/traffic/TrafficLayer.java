@@ -4,11 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PointF;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import net.osmand.data.LatLon;
@@ -20,6 +21,7 @@ import net.osmand.plus.views.ContextMenuLayer;
 import net.osmand.plus.views.OsmandMapLayer;
 import net.osmand.plus.views.OsmandMapTileView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,11 +42,13 @@ public class TrafficLayer extends OsmandMapLayer {
     private OsmandMapTileView view;
 
     private Paint bitmapPaint;
+    private Paint fluidTrafficPaint;
+    private Paint normalTrafficPaint;
+    private Paint hardTrafficPaint;
 
-    private Bitmap parkingNoLimitIcon;
-    private Bitmap parkingLimitIcon;
+    private Bitmap workIcon;
 
-    private boolean timeLimit;
+    ArrayList<TrafficPlugin.Troncon> troncons;
 
     private TrafficPlugin plugin;
 
@@ -55,7 +59,7 @@ public class TrafficLayer extends OsmandMapLayer {
         this.plugin = plugin;
     }
 
-    public LatLon getParkingPoint() {
+    public LatLon getInWorkPoint() {
         return new LatLon(45.18475, 5.73635);
     }
 
@@ -70,45 +74,76 @@ public class TrafficLayer extends OsmandMapLayer {
         bitmapPaint.setDither(true);
         bitmapPaint.setAntiAlias(true);
         bitmapPaint.setFilterBitmap(true);
-        parkingNoLimitIcon = BitmapFactory.decodeResource(view.getResources(), R.drawable.map_poi_parking_pos_no_limit);
-        parkingLimitIcon = BitmapFactory.decodeResource(view.getResources(), R.drawable.map_poi_parking_pos_limit);
+        //workIcon = BitmapFactory.decodeResource(view.getResources(), R.drawable.men_at_work);
+
+        //basic paint
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(8.5f * view.getDensity());
+        paint.setAntiAlias(true);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+
+        // fluid traffic paint
+        fluidTrafficPaint = new Paint(paint);
+        fluidTrafficPaint.setColor(0x8000FF00);
+
+        // normal traffic paint
+        normalTrafficPaint = new Paint(paint);
+        normalTrafficPaint.setColor(0x80000088);
+
+        // hard traffic paint
+        hardTrafficPaint = new Paint(paint);
+        hardTrafficPaint.setColor(0x80FF0000);
 
         contextMenuLayer = view.getLayerByClass(ContextMenuLayer.class);
     }
 
-    @Override
-    public void onDraw(Canvas canvas, RotatedTileBox tileBox, DrawSettings nightMode) {
-        LatLon parkingPoint = getParkingPoint();
-        boolean inMotion = parkingPoint == contextMenuLayer.getMoveableObject();
-        if (parkingPoint == null)
-            return;
+    public void drawSsTroncon (Canvas canvas, RotatedTileBox tileBox, TrafficPlugin.SsTroncon t){
+        float locationX1 = tileBox.getPixXFromLonNoRot(t.getFrom().getLon());
+        float locationY1 = tileBox.getPixYFromLatNoRot(t.getFrom().getLat());
+        float locationX2 = tileBox.getPixXFromLonNoRot(t.getTo().getLon());
+        float locationY2 = tileBox.getPixYFromLatNoRot(t.getTo().getLat());
 
-        Bitmap parkingIcon;
-        if (!timeLimit) {
-            parkingIcon = parkingNoLimitIcon;
-        } else {
-            parkingIcon = parkingLimitIcon;
-        }
-        double latitude = parkingPoint.getLatitude();
-        double longitude = parkingPoint.getLongitude();
-        if (isLocationVisible(tileBox, latitude, longitude) || inMotion) {
-            int marginX = parkingNoLimitIcon.getWidth() / 2;
-            int marginY = parkingNoLimitIcon.getHeight() / 2;
-            float locationX;
-            float locationY;
-            if (inMotion) {
-                PointF pf = contextMenuLayer.getMovableCenterPoint(tileBox);
-                locationX = pf.x;
-                locationY = pf.y;
-            } else {
-                locationX = tileBox.getPixXFromLonNoRot(longitude);
-                locationY = tileBox.getPixYFromLatNoRot(latitude);
-            }
-            canvas.rotate(-view.getRotate(), locationX, locationY);
-            canvas.drawBitmap(parkingIcon, locationX - marginX, locationY - marginY, bitmapPaint);
+        switch(t.getCharge()) {
+            case 0:
+                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, fluidTrafficPaint);
+                //Log.d("DEBUG :", "drawSsTroncon: 0, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
+                break;
+            case 1:
+                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, normalTrafficPaint);
+                //Log.d("DEBUG :", "drawSsTroncon: 1, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
+                break;
+            case 2:
+                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, hardTrafficPaint);
+                //Log.d("DEBUG :", "drawSsTroncon: 2, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
+                break;
+            default:
+                Log.e("ERROR : ", "DrawSsTroncon default case for :" + t.toString());
         }
     }
+    @Override
 
+    public void onDraw(Canvas canvas, RotatedTileBox tileBox, DrawSettings nightMode) {
+
+        for (int i = 0; i<plugin.getTroncons().size(); i++){
+            ArrayList<TrafficPlugin.SsTroncon> etape = plugin.getTroncons().get(i).getEtapes();
+            for(int j = 0; j<etape.size(); j++) {
+                TrafficPlugin.SsTroncon ssTronconToDraw = etape.get(j);
+                drawSsTroncon(canvas, tileBox, ssTronconToDraw);
+            }
+        }
+
+        /*Bitmap parkingIcon = workIcon;
+        int marginX = workIcon.getWidth() / 2;
+        int marginY = workIcon.getHeight() / 2;
+        canvas.rotate(-view.getRotate(), locationX1, locationY1);
+        canvas.drawBitmap(parkingIcon, locationX1 - marginX, locationY1 - marginY, bitmapPaint);*/
+    }
+
+    public void onPrepareBufferImage(Canvas canvas, RotatedTileBox tileBox, DrawSettings nightMode){
+
+    }
     @Override
     public void destroyLayer() {
     }
@@ -119,37 +154,23 @@ public class TrafficLayer extends OsmandMapLayer {
     }
 
     /**
-     * @param latitude
-     * @param longitude
+     * @param latitude1
+     * @param longitude1
+     * @param latitude2
+     * @param longitude2
      * @return true if the parking point is located on a visible part of map
      */
-    private boolean isLocationVisible(RotatedTileBox tb, double latitude, double longitude){
-        if(getParkingPoint() == null || view == null){
+    private boolean isSegmentVisible(RotatedTileBox tb, double latitude1, double longitude1, double latitude2, double longitude2){
+        if(getInWorkPoint() == null || view == null){
             return false;
         }
-        return tb.containsLatLon(latitude, longitude);
+        return tb.containsLatLon(latitude1, longitude1) || tb.containsLatLon(latitude2, longitude2);
     }
 
-    /**
-     * @param point
-     * @param parkingPosition
-     *            is in this case not necessarily has to be a list, but it's also used in method
-     *            <link>collectObjectsFromPoint(PointF point, List<Object> o)</link>
-     */
-    private void getParkingFromPoint(RotatedTileBox tb, PointF point, List<? super LatLon> parkingPosition) {
-        LatLon parkingPoint = getParkingPoint();
-        if (parkingPoint != null && view != null) {
-            int ex = (int) point.x;
-            int ey = (int) point.y;
-            LatLon position = getParkingPoint();
-            int x = (int) tb.getPixXFromLatLon(position.getLatitude(), position.getLongitude());
-            int y = (int) tb.getPixYFromLatLon(position.getLatitude(), position.getLongitude());
-            // the width of an image is 40 px, the height is 60 px -> radius = 20,
-            // the position of a parking point relatively to the icon is at the center of the bottom line of the image
-            int rad = (int) (radius * tb.getDensity());
-            if (Math.abs(x - ex) <= rad && (ey - y) <= rad && (y - ey) <= 2.5 * rad) {
-                parkingPosition.add(parkingPoint);
-            }
+    private boolean isLocationVisible(RotatedTileBox tb, double latitude1, double longitude1){
+        if(getInWorkPoint() == null || view == null){
+            return false;
         }
+        return tb.containsLatLon(latitude1, longitude1);
     }
 }

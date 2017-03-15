@@ -61,7 +61,6 @@ public class RendererRegistry {
 		internalRenderers.put("LightRS", "LightRS" + ".render.xml");
 		internalRenderers.put(NAUTICAL_RENDER, "nautical" + ".render.xml");
 		internalRenderers.put(WINTER_SKI_RENDER, "skimap" + ".render.xml");
-		internalRenderers.put(TRAFFIC_RENDER, "traffic" + ".render.xml");
 		internalRenderers.put(TOPO_RENDER, "topo" + ".render.xml");
 		internalRenderers.put(MAPNIK_RENDER, "mapnik" + ".render.xml");
 	}
