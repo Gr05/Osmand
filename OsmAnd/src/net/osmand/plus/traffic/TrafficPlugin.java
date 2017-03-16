@@ -152,13 +152,15 @@ public class TrafficPlugin extends OsmandPlugin {
 		}
 	}
 
-	public void parseTrafficData(JSONObject dataRout){
+	public void parseTrafficData(JSONObject dataTroncon, JSONObject dataTraffic){
 		Log.d("DEBUG : ", "Dans le parseur");
+		Log.d("DEBUG : ", String.valueOf(dataTraffic.length()));
 		JSONArray features = null;
 		JSONArray traffic = null;
 		this.troncons.clear();
 		try {
-			features = dataRout.getJSONArray("features");
+			features = dataTroncon.getJSONArray("features");
+			traffic = null;
 		} catch (JSONException e) {
 			Log.e("ERREUR", e.getMessage(), e);
 		}
@@ -168,31 +170,39 @@ public class TrafficPlugin extends OsmandPlugin {
 				JSONObject properties = feature.getJSONObject("properties");
 				JSONObject geometry = feature.getJSONObject("geometry");
 				String identifiant = properties.getString("id");
-				String niveau = properties.getString("NIVEAU");
-				Troncon troncon = new Troncon(identifiant);
-				JSONArray coordinates = geometry.getJSONArray("coordinates");
-				for (int j=0; j < coordinates.length() - 1; j++){
-					JSONArray coordinateFrom = coordinates.getJSONArray(j);
-					float coordianteXFrom = Float.parseFloat(coordinateFrom.getString(0));
-					float coordianteYFrom = Float.parseFloat(coordinateFrom.getString(1));
-					Point pointFrom = new Point (coordianteXFrom, coordianteYFrom);
-					JSONArray coordinateTo = coordinates.getJSONArray(j+1);
-					float coordianteXTo = Float.parseFloat(coordinateTo.getString(0));
-					float coordianteYTo = Float.parseFloat(coordinateTo.getString(1));
-					Point pointTo = new Point (coordianteXTo, coordianteYTo);
-					SsTroncon subTronc = new SsTroncon(
-							pointFrom, pointTo, Integer.parseInt(niveau));
-					troncon.addEtape(subTronc);
+				int niveau = properties.getInt("NIVEAU");
+				if (niveau == 1) {
+					Troncon troncon = new Troncon(identifiant);
+					JSONArray coordinates = geometry.getJSONArray("coordinates");
+					for (int j = 0; j < coordinates.length() - 1; j++) {
+						JSONArray coordinateFrom = coordinates.getJSONArray(j);
+						float coordianteXFrom = Float.parseFloat(coordinateFrom.getString(0));
+						float coordianteYFrom = Float.parseFloat(coordinateFrom.getString(1));
+						Point pointFrom = new Point(coordianteXFrom, coordianteYFrom);
+						JSONArray coordinateTo = coordinates.getJSONArray(j + 1);
+						float coordianteXTo = Float.parseFloat(coordinateTo.getString(0));
+						float coordianteYTo = Float.parseFloat(coordinateTo.getString(1));
+						Point pointTo = new Point(coordianteXTo, coordianteYTo);
+						int trafficValue = 0;
+						try {
+							trafficValue = dataTraffic.getJSONArray(identifiant).getJSONObject(0).getInt("nsv_id");
+						} catch (JSONException e) {
+							Log.e("ERREUR : ", e.getMessage(), e);
+						}
+						Log.d("TEST : ", String.valueOf(trafficValue));
+						SsTroncon subTronc = new SsTroncon(
+								pointFrom, pointTo, trafficValue);
+						troncon.addEtape(subTronc);
+					}
+					this.troncons.add(troncon);
 				}
-				this.troncons.add(troncon);
 			} catch (JSONException e) {
 				Log.e("ERREUR", e.getMessage(), e);
 			}
 		}
 	}
 
-	public boolean writeCacheFile(String data){
-		String filename = "trafficCache.json";
+	public boolean writeCacheFile(String data, String filename){
 		String JSONdata = data;
 		FileOutputStream outputStream;
 		try {
@@ -208,8 +218,7 @@ public class TrafficPlugin extends OsmandPlugin {
 		return true;
 	}
 
-	public String getCacheFileContent(){
-		String filename = "trafficCache.json";
+	public String getCacheFileContent(String filename){
 		String JSONdata = null;
 		try {
 			InputStream inputStream = app.openFileInput(filename);
@@ -274,15 +283,13 @@ public class TrafficPlugin extends OsmandPlugin {
 		mHandler.removeCallbacks(mHandlerTask);
 	}
 
-	/* Retrieving of traffic informations either on web or cache file */
-	public void getTrafficInfo(){
+	public String getInfoFromWeb(String _url, String filename){
 		String result = null;
-        try {
+		try {
 			Log.d("DEBUG", "Dans le premier try");
-            URL url = new URL("http://data.metromobilite.fr/api/troncons/json");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			JSONObject jObject = null;
-            try {
+			URL url = new URL(_url);
+			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			try {
 				Log.d("DEBUG", "Dans le deuxième try");
 				int SDK_INT = android.os.Build.VERSION.SDK_INT;
 				if (SDK_INT > 8){
@@ -298,36 +305,43 @@ public class TrafficPlugin extends OsmandPlugin {
 						sb.append(line + "\n");
 					}
 					result = sb.toString();
-					try {
-						Log.d("DEBUG", "Dans le troisième try");
-						// Log.d("DEBUG : ", result);
-						writeCacheFile(result);
-						jObject = new JSONObject(result);
-						// Log.d("DEBUG : ", jObject.toString(4));
-						parseTrafficData(jObject);
-						//printTroncons();
-					} catch (JSONException e) {
-						Log.e("ERREUR (3e try) : ", e.getMessage(), e);
-					}
 					in.close();
+					return result;
 				}
-            } catch (Exception e) {
+			} catch (Exception e) {
 				Log.e("ERREUR (2e try) : ", e.getMessage(), e);
 				/*
 					Traitement à partir du fichier cache
 				 */
-				result = getCacheFileContent();
-				jObject = new JSONObject(result);
-				parseTrafficData(jObject);
+				result = getCacheFileContent(filename);
 				printTroncons();
+				return result;
 				// Log.d("DEBUG : HORS-LIGNE", jObject.toString(4));
-            } finally {
-                urlConnection.disconnect();
-            }
-        } catch (Exception e) {
+			} finally {
+				urlConnection.disconnect();
+			}
+		} catch (Exception e) {
 			Log.e("ERREUR (1er try) : ", e.getMessage(), e);
-        }
-    }
+		}
+		return result;
+	}
+
+	/* Retrieving of traffic informations either on web or cache file */
+	public void getTrafficInfo(){
+		try{
+			String tronconUrl = "http://data.metromobilite.fr/api/troncons/json";
+			String trafficUrl = "http://data.metromobilite.fr/api/dyn/trr/json";
+			String tronconFilename = "tronconCache.json";
+			String trafficFilename = "trafficCache.json";
+			String tronconData = getInfoFromWeb(tronconUrl, tronconFilename);
+			JSONObject tronconJson = new JSONObject(tronconData);
+			String trafficData = getInfoFromWeb(trafficUrl, trafficFilename);
+			JSONObject trafficJson = new JSONObject(trafficData);
+			parseTrafficData(tronconJson, trafficJson);
+		} catch (JSONException e) {
+			Log.e("ERROR : ", e.getMessage(), e);
+		}
+	}
 
 
 
