@@ -48,7 +48,7 @@ public class TrafficLayer extends OsmandMapLayer {
 
     private Bitmap workIcon;
 
-    ArrayList<TrafficPlugin.Troncon> troncons;
+    ArrayList<Troncon> troncons;
 
     private TrafficPlugin plugin;
 
@@ -99,7 +99,7 @@ public class TrafficLayer extends OsmandMapLayer {
         contextMenuLayer = view.getLayerByClass(ContextMenuLayer.class);
     }
 
-    public void drawSsTroncon (Canvas canvas, RotatedTileBox tileBox, TrafficPlugin.SsTroncon t){
+    public void drawSsTroncon (Canvas canvas, RotatedTileBox tileBox, SsTroncon t){
         float locationX1 = tileBox.getPixXFromLonNoRot(t.getFrom().getLon());
         float locationY1 = tileBox.getPixYFromLatNoRot(t.getFrom().getLat());
         float locationX2 = tileBox.getPixXFromLonNoRot(t.getTo().getLon());
@@ -138,10 +138,11 @@ public class TrafficLayer extends OsmandMapLayer {
 
     public void onDraw(Canvas canvas, RotatedTileBox tileBox, DrawSettings nightMode) {
         Log.d("DEBUG : ", "Dans onDraw()");
+        Log.d("DEBUG : ", "Taille du plugin.getTroncons : " + plugin.getTroncons().size());
         for (int i = 0; i<plugin.getTroncons().size(); i++){
-            ArrayList<TrafficPlugin.SsTroncon> etape = plugin.getTroncons().get(i).getEtapes();
+            ArrayList<SsTroncon> etape = plugin.getTroncons().get(i).getEtapes();
             for(int j = 0; j<etape.size(); j++) {
-                TrafficPlugin.SsTroncon ssTronconToDraw = etape.get(j);
+                SsTroncon ssTronconToDraw = etape.get(j);
                 drawSsTroncon(canvas, tileBox, ssTronconToDraw);
             }
         }
