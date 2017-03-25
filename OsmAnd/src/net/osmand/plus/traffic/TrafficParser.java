@@ -23,6 +23,11 @@ import java.util.ArrayList;
 
 public class TrafficParser {
 
+    /*
+    This is purely the parser. No library used only native android. This is the function that will need to modified once the data will be opened.
+     dataTronon is road information (path) but no trafic. If the trafic data comes from another ressource, then use the second parameter to give it to the parser
+     then link both informations based on the ID.
+     */
     public static void parseTrafficData(JSONObject dataTroncon, JSONObject dataTraffic, ArrayList<Troncon> troncons){
         Log.d("DEBUG : ", "Dans le parseur");
         Log.d("DEBUG : ", String.valueOf(dataTraffic.length()));
@@ -74,6 +79,11 @@ public class TrafficParser {
         }
     }
 
+    /*
+    Retrieving information on web url specified. If impossible to get it, then finds the file specified in $filename and reads the data
+    in it. If the data can be accessed from web then wirtes in the cache file so last data is stored.
+    Returns the data read.
+     */
     public static String getInfoFromWeb(String _url, String filename, OsmandApplication app){
         String result = null;
         try {
@@ -117,7 +127,10 @@ public class TrafficParser {
         return result;
     }
 
-    /* Retrieving of traffic informations either on web or cache file */
+    /*
+    Retrieving of traffic informations either on web or cache file
+    Specifies urls and filenames to manage the data
+    */
     public static void getTrafficInfo(OsmandApplication app){
         try{
             String tronconUrl = "http://data.metromobilite.fr/api/troncons/json";

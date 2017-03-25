@@ -1,35 +1,15 @@
 package net.osmand.plus.traffic;
 
 import android.app.Activity;
-import android.content.Context;
-import android.os.Handler;
-import android.os.StrictMode;
 import android.util.Log;
 
 import net.osmand.plus.OsmandApplication;
 import net.osmand.plus.OsmandPlugin;
 import net.osmand.plus.R;
 import net.osmand.plus.activities.MapActivity;
-import net.osmand.plus.parkingpoint.ParkingPositionLayer;
 import net.osmand.plus.render.RendererRegistry;
-import net.osmand.plus.views.MapInfoLayer;
 import net.osmand.plus.views.OsmandMapTileView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class TrafficPlugin extends OsmandPlugin {
@@ -39,6 +19,7 @@ public class TrafficPlugin extends OsmandPlugin {
 	private OsmandApplication app;
 	private String previousRenderer = RendererRegistry.DEFAULT_RENDER;
 	private TrafficLayer trafficLayer;
+	// troncons is the set of roads
 	private static ArrayList<Troncon> troncons = new ArrayList<Troncon>();
 
 	public TrafficPlugin(OsmandApplication app) {
@@ -122,11 +103,14 @@ public class TrafficPlugin extends OsmandPlugin {
 	@Override
 	public void updateLayers(OsmandMapTileView mapView, MapActivity activity) {
 		if (isActive()) {
+			// Starts to loop to get traffic info every 2 minutes or so.
+			// Specify the timer in BackgroundHandler
 			BackgroundHandler.startRepeatingGetTrafficInfo(app);
 			if (trafficLayer == null) {
 				registerLayers(activity);
 			}
 		} else {
+			// Stop looping to get traffic info.
 			BackgroundHandler.stopRepeatingGetTrafficInfo();
 			if (trafficLayer != null) {
 				activity.getMapView().removeLayer(trafficLayer);

@@ -4,6 +4,9 @@ package net.osmand.plus.traffic;
  * Created by vial-grelier on 25/03/2017.
  */
 
+/*
+Basic point representation of a point with LatLong coordinates.
+ */
 public class Point {
     private float lon; // longitude
     private float lat; // latitude

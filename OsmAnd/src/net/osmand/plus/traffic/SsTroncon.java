@@ -4,6 +4,9 @@ package net.osmand.plus.traffic;
  * Created by vial-grelier on 25/03/2017.
  */
 
+/*
+A SsTroncon is a part from Troncon and is composed by two points. The line between two points is the representation of the road.
+ */
 public class SsTroncon {
     private Point from;
     private Point to;

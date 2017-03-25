@@ -10,6 +10,10 @@ import net.osmand.plus.OsmandApplication;
 
 public class BackgroundHandler {
 
+    /*
+    Here is the management of looping and threading information gathering.
+     */
+
     private final static int INTERVAL = 1000 * 60 * 2; //2 minutes (ms * s * min)
     static Handler mHandler = new Handler();
 
@@ -19,6 +23,7 @@ public class BackgroundHandler {
 
         @Override
         public void run() {
+            // calls the function that retrieves information
             TrafficParser.getTrafficInfo(app);
             mHandler.postDelayed(mHandlerTask, INTERVAL);
         }

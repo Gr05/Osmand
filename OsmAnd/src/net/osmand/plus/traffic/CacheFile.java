@@ -18,6 +18,10 @@ import java.io.InputStreamReader;
 
 public class CacheFile {
 
+    /*
+    Function that writes $data in $filename
+    @requires OsmandApplication app
+     */
     public static boolean writeCacheFile(String data, String filename,  OsmandApplication app){
         String JSONdata = data;
         FileOutputStream outputStream;
@@ -34,6 +38,10 @@ public class CacheFile {
         return true;
     }
 
+    /*
+    Function that reads $JSONdata in $filename
+    @requires OsmandApplication app
+     */
     public static String getCacheFileContent(String filename,  OsmandApplication app){
         String JSONdata = null;
         try {
