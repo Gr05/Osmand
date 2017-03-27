@@ -48,8 +48,6 @@ public class TrafficLayer extends OsmandMapLayer {
 
     private Bitmap workIcon;
 
-    ArrayList<TrafficPlugin.Troncon> troncons;
-
     private TrafficPlugin plugin;
 
     private ContextMenuLayer contextMenuLayer;
@@ -74,7 +72,7 @@ public class TrafficLayer extends OsmandMapLayer {
         bitmapPaint.setDither(true);
         bitmapPaint.setAntiAlias(true);
         bitmapPaint.setFilterBitmap(true);
-        //workIcon = BitmapFactory.decodeResource(view.getResources(), R.drawable.men_at_work);
+        workIcon = BitmapFactory.decodeResource(view.getResources(), R.drawable.map_pin_avoid_road);
 
         //basic paint
         Paint paint = new Paint();
@@ -134,11 +132,15 @@ public class TrafficLayer extends OsmandMapLayer {
             }
         }
 
-        /*Bitmap parkingIcon = workIcon;
+        LatLon ppmPos = new LatLon(45.18475, 5.73635);
+
+        float locationX = tileBox.getPixXFromLonNoRot(ppmPos.getLongitude());
+        float locationY = tileBox.getPixYFromLatNoRot(ppmPos.getLatitude());
+        Bitmap parkingIcon = workIcon;
         int marginX = workIcon.getWidth() / 2;
-        int marginY = workIcon.getHeight() / 2;
-        canvas.rotate(-view.getRotate(), locationX1, locationY1);
-        canvas.drawBitmap(parkingIcon, locationX1 - marginX, locationY1 - marginY, bitmapPaint);*/
+        int marginY = workIcon.getHeight();
+        canvas.rotate(-view.getRotate(), locationX, locationY);
+        canvas.drawBitmap(parkingIcon, locationX - marginX, locationY - marginY, bitmapPaint);
     }
 
     public void onPrepareBufferImage(Canvas canvas, RotatedTileBox tileBox, DrawSettings nightMode){
