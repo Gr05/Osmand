@@ -47,7 +47,7 @@ public class TrafficLayer extends OsmandMapLayer {
     private Paint hardTrafficPaint;
 
     private Bitmap workIcon;
-
+    
     private TrafficPlugin plugin;
 
     private ContextMenuLayer contextMenuLayer;
@@ -88,7 +88,7 @@ public class TrafficLayer extends OsmandMapLayer {
 
         // normal traffic paint
         normalTrafficPaint = new Paint(paint);
-        normalTrafficPaint.setColor(0x80000088);
+        normalTrafficPaint.setColor(0x80FFFF00);
 
         // hard traffic paint
         hardTrafficPaint = new Paint(paint);
@@ -97,7 +97,7 @@ public class TrafficLayer extends OsmandMapLayer {
         contextMenuLayer = view.getLayerByClass(ContextMenuLayer.class);
     }
 
-    public void drawSsTroncon (Canvas canvas, RotatedTileBox tileBox, TrafficPlugin.SsTroncon t){
+    public void drawSsTroncon (Canvas canvas, RotatedTileBox tileBox, SsTroncon t){
         float locationX1 = tileBox.getPixXFromLonNoRot(t.getFrom().getLon());
         float locationY1 = tileBox.getPixYFromLatNoRot(t.getFrom().getLat());
         float locationX2 = tileBox.getPixXFromLonNoRot(t.getTo().getLon());
@@ -116,6 +116,18 @@ public class TrafficLayer extends OsmandMapLayer {
                 canvas.drawLine(locationX1, locationY1, locationX2, locationY2, hardTrafficPaint);
                 //Log.d("DEBUG :", "drawSsTroncon: 2, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
                 break;
+            case 3:
+                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, hardTrafficPaint);
+                //Log.d("DEBUG :", "drawSsTroncon: 2, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
+                break;
+            case 4:
+                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, hardTrafficPaint);
+                //Log.d("DEBUG :", "drawSsTroncon: 2, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
+                break;
+            case 5:
+                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, hardTrafficPaint);
+                 //Log.d("DEBUG :", "drawSsTroncon: 2, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
+                break;
             default:
                 Log.e("ERROR : ", "DrawSsTroncon default case for :" + t.toString());
         }
@@ -123,11 +135,12 @@ public class TrafficLayer extends OsmandMapLayer {
     @Override
 
     public void onDraw(Canvas canvas, RotatedTileBox tileBox, DrawSettings nightMode) {
-
+        Log.d("DEBUG : ", "Dans onDraw()");
+        Log.d("DEBUG : ", "Taille du plugin.getTroncons : " + plugin.getTroncons().size());
         for (int i = 0; i<plugin.getTroncons().size(); i++){
-            ArrayList<TrafficPlugin.SsTroncon> etape = plugin.getTroncons().get(i).getEtapes();
+            ArrayList<SsTroncon> etape = plugin.getTroncons().get(i).getEtapes();
             for(int j = 0; j<etape.size(); j++) {
-                TrafficPlugin.SsTroncon ssTronconToDraw = etape.get(j);
+                SsTroncon ssTronconToDraw = etape.get(j);
                 drawSsTroncon(canvas, tileBox, ssTronconToDraw);
             }
         }
