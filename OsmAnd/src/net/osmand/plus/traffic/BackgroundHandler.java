@@ -25,6 +25,7 @@ public class BackgroundHandler {
         public void run() {
             // calls the function that retrieves information
             TrafficParser.getTrafficInfo(app);
+            EventParser.getEventsInfo(app);
             mHandler.postDelayed(mHandlerTask, INTERVAL);
         }
 

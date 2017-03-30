@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
@@ -22,6 +23,7 @@ import net.osmand.plus.views.OsmandMapLayer;
 import net.osmand.plus.views.OsmandMapTileView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -36,6 +38,8 @@ public class TrafficLayer extends OsmandMapLayer {
      */
     private static final int radius = 18;
 
+    private int canvas_save = -10;
+
     private DisplayMetrics dm;
 
     private final MapActivity map;
@@ -45,6 +49,7 @@ public class TrafficLayer extends OsmandMapLayer {
     private Paint fluidTrafficPaint;
     private Paint normalTrafficPaint;
     private Paint hardTrafficPaint;
+    private Paint noTrafficPaint;
 
     private Bitmap workIcon;
     
@@ -76,84 +81,123 @@ public class TrafficLayer extends OsmandMapLayer {
 
         //basic paint
         Paint paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(8.5f * view.getDensity());
+        paint.setShadowLayer((float) 2.0, (float) 2.0, (float) 2.0, Color.BLACK);
+        paint.setStrokeWidth(2.5f * view.getDensity());               // set the size
+        paint.setDither(true);                    // set the dither to true
+        paint.setStyle(Paint.Style.STROKE);       // set to STOKE
+        paint.setStrokeJoin(Paint.Join.ROUND);    // set the join to round you want
+        paint.setStrokeCap(Paint.Cap.ROUND);      // set the paint cap to round too
+        paint.setPathEffect(new CornerPathEffect(10) );   // set the path effect when they join.
         paint.setAntiAlias(true);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeJoin(Paint.Join.ROUND);
 
         // fluid traffic paint
         fluidTrafficPaint = new Paint(paint);
-        fluidTrafficPaint.setColor(0x8000FF00);
+        fluidTrafficPaint.setColor(0xFF00FF00);
+
 
         // normal traffic paint
         normalTrafficPaint = new Paint(paint);
-        normalTrafficPaint.setColor(0x80FFFF00);
+        normalTrafficPaint.setColor(0xFFFFFF00);
 
         // hard traffic paint
         hardTrafficPaint = new Paint(paint);
-        hardTrafficPaint.setColor(0x80FF0000);
+        hardTrafficPaint.setColor(0xFFFF0000);
+
+        // no trafic data paint
+        noTrafficPaint = new Paint(paint);
+        noTrafficPaint.setColor(0xFFFFFFFF);
 
         contextMenuLayer = view.getLayerByClass(ContextMenuLayer.class);
     }
 
-    public void drawSsTroncon (Canvas canvas, RotatedTileBox tileBox, SsTroncon t){
-        float locationX1 = tileBox.getPixXFromLonNoRot(t.getFrom().getLon());
-        float locationY1 = tileBox.getPixYFromLatNoRot(t.getFrom().getLat());
-        float locationX2 = tileBox.getPixXFromLonNoRot(t.getTo().getLon());
-        float locationY2 = tileBox.getPixYFromLatNoRot(t.getTo().getLat());
+    public void drawTroncon (Canvas canvas, RotatedTileBox tileBox, Troncon troncon){
 
-        switch(t.getCharge()) {
+        Path pathToDraw = new Path();
+        ArrayList<SsTroncon> etapes = troncon.getEtapes();
+        Iterator<SsTroncon> iterator = etapes.iterator();
+
+        while (iterator.hasNext()){
+            SsTroncon ssTroncon = iterator.next();
+            float locationX1 = tileBox.getPixXFromLonNoRot(ssTroncon.getFrom().getLon());
+            float locationY1 = tileBox.getPixYFromLatNoRot(ssTroncon.getFrom().getLat());
+            pathToDraw.moveTo(locationX1, locationY1);
+            float locationX2 = tileBox.getPixXFromLonNoRot(ssTroncon.getTo().getLon());
+            float locationY2 = tileBox.getPixYFromLatNoRot(ssTroncon.getTo().getLat());
+            pathToDraw.lineTo(locationX2, locationY2);
+        }
+
+        Log.d("TRONCON : ", "charge : " + troncon.getCharge());
+        switch(troncon.getCharge()) {
+            case -1:
+                canvas.drawPath(pathToDraw, noTrafficPaint);
+                break;
             case 0:
-                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, fluidTrafficPaint);
+                canvas.drawPath(pathToDraw, noTrafficPaint);
                 //Log.d("DEBUG :", "drawSsTroncon: 0, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
                 break;
             case 1:
-                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, normalTrafficPaint);
+                canvas.drawPath(pathToDraw, fluidTrafficPaint);
                 //Log.d("DEBUG :", "drawSsTroncon: 1, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
                 break;
             case 2:
-                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, hardTrafficPaint);
+                canvas.drawPath(pathToDraw, normalTrafficPaint);
                 //Log.d("DEBUG :", "drawSsTroncon: 2, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
                 break;
             case 3:
-                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, hardTrafficPaint);
+                canvas.drawPath(pathToDraw, hardTrafficPaint);
                 //Log.d("DEBUG :", "drawSsTroncon: 2, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
                 break;
             case 4:
-                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, hardTrafficPaint);
+                canvas.drawPath(pathToDraw, hardTrafficPaint);
                 //Log.d("DEBUG :", "drawSsTroncon: 2, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
                 break;
             case 5:
-                canvas.drawLine(locationX1, locationY1, locationX2, locationY2, hardTrafficPaint);
-                 //Log.d("DEBUG :", "drawSsTroncon: 2, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
+                canvas.drawPath(pathToDraw, hardTrafficPaint);
+                //Log.d("DEBUG :", "drawSsTroncon: 2, lon :" + t.getFrom().getLon() + " lat : " + t.getFrom().getLat());
                 break;
             default:
-                Log.e("ERROR : ", "DrawSsTroncon default case for :" + t.toString());
+                Log.e("ERROR : ", "Draw troncon default case for :" + troncon.toString());
         }
     }
     @Override
 
     public void onDraw(Canvas canvas, RotatedTileBox tileBox, DrawSettings nightMode) {
+        if( canvas_save  != -10 ){
+            canvas.restore();
+        }
+        this.canvas_save = canvas.save();
+        refresh();
         Log.d("DEBUG : ", "Dans onDraw()");
         Log.d("DEBUG : ", "Taille du plugin.getTroncons : " + plugin.getTroncons().size());
         for (int i = 0; i<plugin.getTroncons().size(); i++){
-            ArrayList<SsTroncon> etape = plugin.getTroncons().get(i).getEtapes();
-            for(int j = 0; j<etape.size(); j++) {
-                SsTroncon ssTronconToDraw = etape.get(j);
-                drawSsTroncon(canvas, tileBox, ssTronconToDraw);
+            drawTroncon(canvas, tileBox, plugin.getTroncons().get(i));
+        }
+
+        for (int i = 0; i < plugin.getEvents().size(); i ++){
+            Log.d("DEBUG : ", "Taille du plugin.getEvents : " + plugin.getEvents().size());
+            Event evt = plugin.getEvents().get(i);
+
+            switch (evt.getType()){
+                case "chantier":
+
+                    LatLon ppmPos = new LatLon(evt.getLocation().getLat(), evt.getLocation().getLon());
+
+                    float locationX = tileBox.getPixXFromLonNoRot(ppmPos.getLongitude());
+                    float locationY = tileBox.getPixYFromLatNoRot(ppmPos.getLatitude());
+                    Bitmap parkingIcon = workIcon;
+                    int marginX = workIcon.getWidth() / 2;
+                    int marginY = workIcon.getHeight();
+                    canvas.rotate(-view.getRotate(), locationX, locationY);
+                    canvas.drawBitmap(parkingIcon, locationX - marginX, locationY - marginY, bitmapPaint);
+                    break;
+
             }
         }
 
-        LatLon ppmPos = new LatLon(45.18475, 5.73635);
+    }
 
-        float locationX = tileBox.getPixXFromLonNoRot(ppmPos.getLongitude());
-        float locationY = tileBox.getPixYFromLatNoRot(ppmPos.getLatitude());
-        Bitmap parkingIcon = workIcon;
-        int marginX = workIcon.getWidth() / 2;
-        int marginY = workIcon.getHeight();
-        canvas.rotate(-view.getRotate(), locationX, locationY);
-        canvas.drawBitmap(parkingIcon, locationX - marginX, locationY - marginY, bitmapPaint);
+    public void refresh(){
+        this.view.refreshMap();
     }
 
     public void onPrepareBufferImage(Canvas canvas, RotatedTileBox tileBox, DrawSettings nightMode){

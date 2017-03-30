@@ -11,9 +11,19 @@ import java.util.ArrayList;
 public class Troncon {
     private ArrayList<SsTroncon> etapes = new ArrayList<SsTroncon>();
     private String identifiant;
+    private int charge;
 
-    public Troncon(String identifiant){
+    public Troncon(String identifiant, int charge){
         this.identifiant = identifiant;
+        this.charge = charge;
+    }
+
+    public void setCharge(int charge){
+        this.charge = charge;
+    }
+
+    public int getCharge(){
+        return this.charge;
     }
 
     public void addEtape(SsTroncon ssTrc){

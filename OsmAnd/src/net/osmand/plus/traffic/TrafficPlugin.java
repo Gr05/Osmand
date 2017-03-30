@@ -21,6 +21,8 @@ public class TrafficPlugin extends OsmandPlugin {
 	private TrafficLayer trafficLayer;
 	// troncons is the set of roads
 	private static ArrayList<Troncon> troncons = new ArrayList<Troncon>();
+	// events are differents event on / near the road
+	private static ArrayList<Event> events = new ArrayList<Event>();
 
 	public TrafficPlugin(OsmandApplication app) {
 		this.app = app;
@@ -53,6 +55,8 @@ public class TrafficPlugin extends OsmandPlugin {
     public static ArrayList<Troncon> getTroncons(){
         return troncons;
     }
+
+    public static ArrayList<Event> getEvents() { return events; }
 
 	public void printTroncons(){
 		for (int i = 0; i < this.troncons.size(); i++){
